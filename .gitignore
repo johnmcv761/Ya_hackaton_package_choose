@@ -3,3 +3,4 @@ data.zip
 /data/
 /.venv/
 .DS_Store
+/catboost_info/
