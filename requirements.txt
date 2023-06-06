@@ -8,3 +8,4 @@ matplotlib
 seaborn==0.11.1
 catboost==1.2
 imblearn
+xgboost==1.7.5
