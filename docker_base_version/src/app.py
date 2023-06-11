@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 import uvicorn
 import argparse
-from model import predict
+from model import predict, recomend_wraper
 from pydantic import BaseModel
 from typing import List
 from fastapi.encoders import jsonable_encoder
@@ -30,8 +30,10 @@ def health():
 @app.get("/pack")
 def get_prediction(request: Order):
     y = predict(jsonable_encoder(request))
+    w = recomend_wraper(jsonable_encoder(request))
     return {"orderId": request.orderId,
-            "package": y,
+            "carton": y,
+            "wrappers": w,
             "status": "ok"}
 
 
