@@ -26,8 +26,17 @@ app = FastAPI()
 def health():
     return {"status": "ok"}
 
+#
+# @app.get("/pack")
+# def get_prediction(request: Order):
+#     y = predict(jsonable_encoder(request))
+#     w = recomend_wraper(jsonable_encoder(request))
+#     return {"orderId": request.orderId,
+#             "carton": y,
+#             "wrappers": w,
+#             "status": "ok"}
 
-@app.get("/pack")
+@app.post("/pack")
 def get_prediction(request: Order):
     y = predict(jsonable_encoder(request))
     w = recomend_wraper(jsonable_encoder(request))
