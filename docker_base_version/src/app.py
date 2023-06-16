@@ -1,22 +1,22 @@
 from fastapi import FastAPI, Request
 import uvicorn
 import argparse
-from model import predict, recomend_wraper
+from model import predict, recommend_wrapper
 from pydantic import BaseModel
 from typing import List
 from fastapi.encoders import jsonable_encoder
 
 class Item(BaseModel):
     sku: str
-    count: float
+    amount: int
     a: float
     b: float
     c: float
     weight: float
-    type: List[int]
+    cargotypes: List[int]
 
 class Order(BaseModel):
-    orderId: str
+    order_id: str
     items: List[Item]
 
 app = FastAPI()
@@ -26,24 +26,25 @@ app = FastAPI()
 def health():
     return {"status": "ok"}
 
-#
-# @app.get("/pack")
+
+@app.get("/pack")
+def get_prediction(request: Order):
+    y = predict(jsonable_encoder(request))
+    w = recommend_wrapper(jsonable_encoder(request))
+    return {"orderId": request.order_id,
+            "carton": y,
+            "wrappers": w,
+            # "status": "ok"
+            }
+
+# @app.post("/pack")
 # def get_prediction(request: Order):
 #     y = predict(jsonable_encoder(request))
 #     w = recomend_wraper(jsonable_encoder(request))
-#     return {"orderId": request.orderId,
+#     return {"order_id": request.orderId,
 #             "carton": y,
 #             "wrappers": w,
 #             "status": "ok"}
-
-@app.post("/pack")
-def get_prediction(request: Order):
-    y = predict(jsonable_encoder(request))
-    w = recomend_wraper(jsonable_encoder(request))
-    return {"orderId": request.orderId,
-            "carton": y,
-            "wrappers": w,
-            "status": "ok"}
 
 
 if __name__ == "__main__":
